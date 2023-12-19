@@ -35,8 +35,8 @@ export class BooksControllers{
             } else {
                 return res.status(404).json({ error: "Book not found."});
             }
-        } catch (error) {
-            return res.status(500).json({error: "Internal Server Error"});
+        }catch (error) {
+            return res.status(404).json({error: "Book not found."});
         }
     };
 
@@ -46,7 +46,7 @@ export class BooksControllers{
             this.bookService.deleteBook(bookId);
             return res.status(204).send();
         }catch (error) {
-            return res.status(500).json({error: "Internal Server Error"});
+            return res.status(404).json({error: "Book not found."});
         }
     };  
 }
