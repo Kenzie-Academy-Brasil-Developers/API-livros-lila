@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "./AppErros";
+import { AppError } from "../errors/AppErros";
 
 export class GlobalErros {
     handleErrors = (
