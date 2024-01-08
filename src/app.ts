@@ -1,11 +1,14 @@
+import "express-async-errors";
 import express, { json } from "express";
 import { booksRouter } from "./routes/books.routes";
-import { GlobalErros } from "./middlewares/errors.middleware";
+import { GlobalErros } from "./errors/GlobalErrors";
+import helmet from "helmet";
 
 export const app = express();
-const globalErrors = new GlobalErros();
-
+app.use(helmet());
 app.use(json());
+
+const globalErrors = new GlobalErros();
 
 app.use("/books", booksRouter);
 

@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "../errors/AppErros";
+import { AppError } from "./AppErros";
+import { ZodError } from "zod";
+import { AnyZodObject } from "zod";
 
 export class GlobalErros {
     handleErrors = (
@@ -15,5 +17,14 @@ export class GlobalErros {
         console.log(err);
 
         return res.status(500).json({ error: "Internal server error." });
+    };
+
+    validateBody = (schema: AnyZodObject) => {
+        return async(req: Request, res: Response, next: NextFunction) => {
+    
+          req.body = await schema.parseAsync(req.body);
+
+            return next();                 
+        };
     };
 }

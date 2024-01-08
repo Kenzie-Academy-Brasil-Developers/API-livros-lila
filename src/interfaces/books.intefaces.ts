@@ -1,15 +1,13 @@
-interface Book {
-    owner: any;
-    id: number;
-    name: string;
-    pages: number;
-    category?: string;
-    createdAt: Date;
-    updatedAt: Date;
+import { AnyZodObject, z } from "zod";
+import { createBookSchema } from "../schemas/createBooksBody.schemas";
+
+type Book = z.infer<typeof createBookSchema>;
+
+interface RequestSchema {
+    parseAsync(body: any): import("express-serve-static-core").ParamsDictionary | PromiseLike<import("express-serve-static-core").ParamsDictionary>;
+    params?: AnyZodObject;
+    body?: AnyZodObject;
+    query?: AnyZodObject;
 }
 
-type CreateBook = Pick<Book, "name" | "pages" | "category">;
-
-type UpdateBook = Partial<Omit<CreateBook, "name">>;
-
-export { Book, CreateBook, UpdateBook };
+export { Book, RequestSchema };
