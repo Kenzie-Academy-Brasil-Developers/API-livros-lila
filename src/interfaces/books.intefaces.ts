@@ -1,13 +1,15 @@
 import { AnyZodObject, z } from "zod";
-import { createBookSchema } from "../schemas/createBooksBody.schemas";
+import { bookSchema, createBookBodySchema, updateBookBodySchema } from "../schemas/books.schemas";
 
-type Book = z.infer<typeof createBookSchema>;
+type Book = z.infer<typeof bookSchema>;
 
-interface RequestSchema {
-    parseAsync(body: any): import("express-serve-static-core").ParamsDictionary | PromiseLike<import("express-serve-static-core").ParamsDictionary>;
-    params?: AnyZodObject;
-    body?: AnyZodObject;
-    query?: AnyZodObject;
+type CreateBook = z.infer<typeof createBookBodySchema>;
+
+type updateBook = z.infer<typeof updateBookBodySchema>;
+
+type RequestSchemas = {
+   body?: AnyZodObject;
+   query?: AnyZodObject;
 }
 
-export { Book, RequestSchema };
+export { Book, CreateBook, updateBook, RequestSchemas };
