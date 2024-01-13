@@ -1,7 +1,7 @@
 import "express-async-errors";
 import express, { json } from "express";
 import { booksRouter } from "./routes/books.routes";
-import { GlobalErros } from "./errors/GlobalErrors";
+import { GlobalErros } from "./errors/handleErrors";
 import helmet from "helmet";
 
 export const app = express();

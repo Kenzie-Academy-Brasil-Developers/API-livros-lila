@@ -1,44 +1,33 @@
 import { Request, Response } from "express";
+import { BookServices } from "../services/books.services";
 // import { BookServices } from "../services/books.services";
 
 export class BooksControllers{
+  
     createBook = (req: Request, res: Response): Response => {
-        const newBook = this.bookService.createBook(req.body.name, req.body.pages, req.body.category);
+        const booksService = new BookServices();
+
+        const response = booksService.createBook(req.body);
         
-        return res.status(201).json(newBook);
+        return res.status(201).json(response);
     } 
 
     getBooks = (req: Request, res: Response): Response => {
-        const name = req.query.name as string
-
-        if (!name) {
-            const allBooks = this.bookService.getAllBooks();
-            return res.status(200).json(allBooks);
-        }
-
-        const booksByName = this.bookService.getBooksByName(name);
-
-        if (booksByName.length === 0) {
-            return res.status(404).json({ message: "Nenhum livro eocontrado com o nome fornecido."});
-        }
-
-        return res.status(200).json(booksByName);
+        const name = req.query.name as string;
+  
+        const allBooks = this.bookService.getBooks(name);
+        return res.status(200).json(allBooks);
     }
 
     getSingleBook = (req: Request, res: Response): Response => {
-        const bookId = Number(req.params.id);
-        const bookFound = this.bookService.getSingleBook(bookId);
+        const category = req.query.category as string;
 
-        if (bookFound) {
-            return res.status(200).json(bookFound);
-        } else {
-            return res.status(404).json({ error: "Book not found." });
-        }
+        const bookFound = this.bookService.getSingleBook(category);
+       
+        return res.status(404).json(bookFound); 
     };
 
     updateBook = (req: Request, res: Response) => {
-        const bookId = Number(req.params.id);
-
         try {
             const updatedBook = this.bookService.updateBook(req.body);
             if (updatedBook) {
@@ -61,6 +50,14 @@ export class BooksControllers{
         }
     };  
     bookService: any;
+
+    editBook = (req: Request, res: Response): Response => {
+        const booksService = new BookServices();
+
+        const response = booksService.editBook(req.body.id, req.body)
+        
+        return res.status(200).json(response);
+    } 
 }
 
 

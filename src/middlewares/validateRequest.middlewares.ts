@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { RequestSchemas } from "../interfaces/books.intefaces";
+import { RequestSchemasType } from "../interfaces/books.intefaces";
 
-export class ValidateBody {
-    static execute(schemas: RequestSchemas){
+export class ValidateRequest {
+    static execute(schemas: RequestSchemasType){
         return async (req: Request, res: Response, next: NextFunction) => {
             
             if (schemas.body){
@@ -17,3 +17,4 @@ export class ValidateBody {
         }; 
     };
 }
+

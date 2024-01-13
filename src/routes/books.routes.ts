@@ -1,30 +1,31 @@
 import { Router } from "express";
 import { BooksControllers } from "../controllers/books.controllers";
-import { GlobalErros } from "../errors/GlobalErrors";
-import { createBookBodySchema } from "../schemas/books.schemas";
-import { ValidateBody } from "../middlewares/validateBody.middlewares";
+import { GlobalErros } from "../errors/handleErrors";
+import { createBookBodySchema, updateBookBodySchema } from "../schemas/books.schemas";
+import { ValidateRequest } from "../middlewares/validateRequest.middlewares";
 import { BookMiddlewares } from "../middlewares/books.middleware";
-
 
 export const booksRouter = Router();
 export const booksControllers = new BooksControllers();
 export const bookMiddlewares = new BookMiddlewares();
-export const GlobalErrors = new GlobalErros();
+export const globalErrors = new GlobalErros();
 
 booksRouter.get("/", booksControllers.getBooks);
 
 booksRouter.post(
     "/",
-    ValidateBody.execute({body: createBookBodySchema}),
+    ValidateRequest.execute({body: createBookBodySchema}),
+    globalErrors.validateBody({query: createBookBodySchema}),
     bookMiddlewares.verifyBookRegister,
     booksControllers.createBook);
 
 booksRouter.patch(
     "/:id",
-    ValidateBody.execute({body: createBookBodySchema}),
+    ValidateRequest.execute({body: createBookBodySchema}),
+    globalErrors.validateBody({query: updateBookBodySchema}),
     bookMiddlewares.verifyBookId ,
     bookMiddlewares.verifyBookRegister,
-    booksControllers.updateBook);
+    booksControllers.editBook);
 
 booksRouter.get("/:id", bookMiddlewares.verifyBookId, booksControllers.getSingleBook);
 

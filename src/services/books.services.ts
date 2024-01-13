@@ -1,34 +1,34 @@
 import { booksDatabase } from "../database/database";
-import { Book} from "../interfaces/books.intefaces";
+import { TBook, TCreateBookType, TEditBookType} from "../interfaces/books.intefaces";
 
 export class BookServices {
+    private id = 1
     
-    createBook = (name: string, pages: number, category: string ): Book => {
-        const newBook: Book = {
-            name,
-            pages,
-            category,
-        };
-    
+    createBook = (data: TCreateBookType) => {
+
+        const newBook: TBook = { id: this.id++, ...data, createdAt: new Date(), updatedAt: new Date()};
+
         booksDatabase.push(newBook);
 
         return newBook;
     };
-
-    getBooksByName = (name: string): Book[] => {
-        const book = this.getBooksByName(name);
-        return book;
+    
+    getSingleBook = (body: string) => {
+        
+        return booksDatabase.filter((book) => book.category === body);
     };
 
-    getSingleBook = (name: string) => {
-        return booksDatabase.find((book) => book.name === name);
+    getBooks = (query: string) => {
+
+        return booksDatabase.filter((book) => book.name === query);
     };
 
-    updateBook = (name: string)=> {
-        const bookIndex = booksDatabase.findIndex((book) => book.name === name);
+    updateBook = (currentName: string)=> {
+        const bookIndex = booksDatabase.findIndex((book) => book.name === currentName);
         
         if (bookIndex === -1) {
-            return undefined;
+
+            return bookIndex;
         }
 
         return booksDatabase[bookIndex];
@@ -43,8 +43,23 @@ export class BookServices {
             throw new Error (`Book with ID ${name} not found`);
         }
     };
-}
 
+    editBook(id: number, data: TEditBookType){
+        const bookIndex = booksDatabase.findIndex(book => book.id === Number(id));
 
+        if (bookIndex === -1) {
+            return undefined;
+        }
+
+        const updatedBook: TBook = {
+            ...booksDatabase[bookIndex],
+            ...data,
+        }
+
+        booksDatabase.splice(bookIndex, 1, updatedBook);
+
+        return updatedBook;
+    };
+};
 
 

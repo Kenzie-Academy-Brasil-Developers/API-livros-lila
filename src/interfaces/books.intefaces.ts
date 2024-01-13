@@ -1,15 +1,15 @@
 import { AnyZodObject, z } from "zod";
-import { bookSchema, createBookBodySchema, updateBookBodySchema } from "../schemas/books.schemas";
+import { arryBookSchema, bookSchema, createBookBodySchema, updateBookBodySchema } from "../schemas/books.schemas";
 
-type Book = z.infer<typeof bookSchema>;
+export type TBook = z.infer<typeof bookSchema>;
 
-type CreateBook = z.infer<typeof createBookBodySchema>;
+export type TCreateBookType = z.infer<typeof createBookBodySchema>;
 
-type updateBook = z.infer<typeof updateBookBodySchema>;
+export type TEditBookType = z.infer<typeof updateBookBodySchema>;
 
-type RequestSchemas = {
+export type ArrayBook = z.infer<typeof arryBookSchema>;
+
+export interface RequestSchemasType {
    body?: AnyZodObject;
    query?: AnyZodObject;
 }
-
-export { Book, CreateBook, updateBook, RequestSchemas };

@@ -14,7 +14,7 @@ export class BookMiddlewares {
 
 verifyBookRegister = (req: Request, res: Response, next: NextFunction): void => {
     const { name } = req.body;
-    console.log(name)
+
     const bookFound = booksDatabase.find((book) => book.name === name);
 
     if(bookFound) {
