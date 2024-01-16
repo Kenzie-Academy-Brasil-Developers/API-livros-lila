@@ -12,23 +12,6 @@ export class BooksControllers{
         return res.status(201).json(response);
     } 
 
-    // createBook = (data: TCreateBookType): TBook => {
-    //     const existingBook = booksDatabase.find((book) => book.name === data.name);
-    //     if (existingBook) {
-    //         throw new Error(`Book with the name ${data.name} already exists.`)
-    //     }
-    //     const newBook: TBook = {
-    //         id: this.id++,
-    //         name: data.name !== undefined ? data.name: '',
-    //         pages: data.pages !== undefined ? data.pages: 0,
-    //         category: data.category !== undefined ? data.category: null,
-    //         createdAt: new Date(),
-    //         updatedAt: new Date(),
-    //     };
-    //     booksDatabase.push(newBook);
-    //     return newBook;
-    // };
-
     getBooks = (req: Request, res: Response): Response => {
         const searcheTerm = req.query.search as string; 
         const filteredBooks = this.bookService.getBooks(searcheTerm);

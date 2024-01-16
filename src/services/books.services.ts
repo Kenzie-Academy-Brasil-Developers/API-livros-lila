@@ -8,20 +8,13 @@ export class BookServices {
     createBook = (data: TCreateBookType): TBook => {
         const newBook: TBook = {
             id: this.id++,
-            name: data.name !== undefined ? data.name: '',
-            pages: data.pages !== undefined ? data.pages: 0,
-            category: data.category !== undefined ? data.category: null,
+            ...data,
             createdAt: new Date(),
             updatedAt: new Date(),
         };
         booksDatabase.push(newBook);
         return newBook;
-    };
-
-    //  createBook = (req: Request, res: Response): Response => {
-    //     const response = this.bookService.createBook(req.body);       
-    //     return res.status(201).json(response);
-    // } 
+    }; 
     
     getBooks = (searchTerm: string) => {
         if(searchTerm){

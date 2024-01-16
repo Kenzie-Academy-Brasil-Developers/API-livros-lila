@@ -15,14 +15,14 @@ booksRouter.get("/", booksControllers.getBooks);
 booksRouter.post(
     "/",
     ValidateRequest.execute({body: createBookBodySchema}),
-    bookMiddlewares.verifyBookRegister,
+    bookMiddlewares.verifyBookName,
     booksControllers.createBook);
 
 booksRouter.patch(
     "/:id",
     ValidateRequest.execute({body: updateBookBodySchema}),
     bookMiddlewares.verifyBookId ,
-    bookMiddlewares.verifyBookRegister,
+    bookMiddlewares.verifyBookName,
     booksControllers.editBook);
 
 booksRouter.get("/:id", bookMiddlewares.verifyBookId, booksControllers.getSingleBook);

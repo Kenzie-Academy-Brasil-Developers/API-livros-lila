@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { booksDatabase } from "../database/database";
 import { AppError } from "../errors/AppErros";
+import { TBook } from "../interfaces/books.intefaces";
 
 export class BookMiddlewares {
     verifyBookId = (req: Request, _res: Response, next: NextFunction): void => {
@@ -15,21 +16,14 @@ export class BookMiddlewares {
         return next();
 };
 
-    verifyBookRegister = (req: Request, _res: Response, next: NextFunction): void => {
-        const { name, category } = req.body;
-        if (!name || typeof name !== "string" || name.trim() === "") {
-            throw new AppError(200, "Invalid book name.");
-        }
-        if (category !== null && category !== undefined) {
-            if (typeof category !== 'string' || category.trim() === '') {
-                throw new AppError(400, "Invalid book category.");
-            }
-        }
-        const lowerCaseName = name.toLowerCase();
-        const bookFound = booksDatabase.find((book) => book.name.toLowerCase() === lowerCaseName);
-        if(bookFound) {
+    verifyBookName = (req: Request, _res: Response, next: NextFunction): void => {
+        const { name } = req.body;
+        const nameExists: TBook | undefined = booksDatabase.find(
+            (book) => book.name === name
+        );
+        if (nameExists) {
             throw new AppError(409, "Book already registered.");
-        };
+        }
         return next();
     };
 };

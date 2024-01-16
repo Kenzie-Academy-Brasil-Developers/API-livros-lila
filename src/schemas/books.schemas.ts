@@ -4,7 +4,7 @@ export const bookSchema = z.object({
     id: z.number().positive(),
     name: z.string().min(3),
     pages: z.number().min(1).positive(),
-    category: z.string().nullable(),
+    category: z.string().nullish(),
     createdAt: z.date(),
     updatedAt: z.date(),
 });
