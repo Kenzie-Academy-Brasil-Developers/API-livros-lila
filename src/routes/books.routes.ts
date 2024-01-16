@@ -15,14 +15,12 @@ booksRouter.get("/", booksControllers.getBooks);
 booksRouter.post(
     "/",
     ValidateRequest.execute({body: createBookBodySchema}),
-    globalErrors.validateBody({query: createBookBodySchema}),
     bookMiddlewares.verifyBookRegister,
     booksControllers.createBook);
 
 booksRouter.patch(
     "/:id",
-    ValidateRequest.execute({body: createBookBodySchema}),
-    globalErrors.validateBody({query: updateBookBodySchema}),
+    ValidateRequest.execute({body: updateBookBodySchema}),
     bookMiddlewares.verifyBookId ,
     bookMiddlewares.verifyBookRegister,
     booksControllers.editBook);
@@ -30,4 +28,6 @@ booksRouter.patch(
 booksRouter.get("/:id", bookMiddlewares.verifyBookId, booksControllers.getSingleBook);
 
 booksRouter.delete("/:id", bookMiddlewares.verifyBookId, booksControllers.deleteBook);
+
+booksRouter.use(globalErrors.handleErrors);
 

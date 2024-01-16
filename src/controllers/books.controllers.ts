@@ -1,63 +1,73 @@
 import { Request, Response } from "express";
 import { BookServices } from "../services/books.services";
-// import { BookServices } from "../services/books.services";
+import { TBook, TCreateBookType } from "../interfaces/books.intefaces";
+import { booksDatabase } from "../database/database";
+
 
 export class BooksControllers{
-  
-    createBook = (req: Request, res: Response): Response => {
-        const booksService = new BookServices();
+    private bookService = new BookServices();
 
-        const response = booksService.createBook(req.body);
-        
+    createBook = (req: Request, res: Response): Response => {
+        const response = this.bookService.createBook(req.body);       
         return res.status(201).json(response);
     } 
 
+    // createBook = (data: TCreateBookType): TBook => {
+    //     const existingBook = booksDatabase.find((book) => book.name === data.name);
+    //     if (existingBook) {
+    //         throw new Error(`Book with the name ${data.name} already exists.`)
+    //     }
+    //     const newBook: TBook = {
+    //         id: this.id++,
+    //         name: data.name !== undefined ? data.name: '',
+    //         pages: data.pages !== undefined ? data.pages: 0,
+    //         category: data.category !== undefined ? data.category: null,
+    //         createdAt: new Date(),
+    //         updatedAt: new Date(),
+    //     };
+    //     booksDatabase.push(newBook);
+    //     return newBook;
+    // };
+
     getBooks = (req: Request, res: Response): Response => {
-        const name = req.query.name as string;
-  
-        const allBooks = this.bookService.getBooks(name);
-        return res.status(200).json(allBooks);
+        const searcheTerm = req.query.search as string; 
+        const filteredBooks = this.bookService.getBooks(searcheTerm);
+        return res.status(200).json(filteredBooks);
     }
 
     getSingleBook = (req: Request, res: Response): Response => {
-        const category = req.query.category as string;
-
-        const bookFound = this.bookService.getSingleBook(category);
-       
-        return res.status(404).json(bookFound); 
+        const bookId: number = Number(req.params.id);
+        const bookFound = this.bookService.getSingleBook(bookId); 
+        if (bookFound) {
+            return res.status(200).json(bookFound);
+        } else {
+            return res.status(404).json({ error: "Book not found"});
+        }     
     };
 
-    updateBook = (req: Request, res: Response) => {
-        try {
-            const updatedBook = this.bookService.updateBook(req.body);
-            if (updatedBook) {
+    updateBook = (req: Request, res: Response): Response => {
+            const bookId: number = Number(req.params.id);
+            const updatedBook = this.bookService.updateBook(bookId, req.body);
+            if (updatedBook !== undefined) {
                 return res.status(200).json(updatedBook);
             } else {
                 return res.status(404).json({ error: "Book not found."});
             }
-        }catch (error) {
-            return res.status(404).json({error: "Book not found."});
-        }
     };
 
-    deleteBook = (req: Request, res: Response): Response => {
-        const bookId = res.locals.booksIndex;
-        try {
-            this.bookService.deleteBook(bookId);
+    deleteBook = (_req: Request, res: Response): Response => {
             return res.status(204).send();
-        }catch (error) {
-            return res.status(404).json({error: "Book not found."});
-        }
     };  
-    bookService: any;
 
     editBook = (req: Request, res: Response): Response => {
-        const booksService = new BookServices();
-
-        const response = booksService.editBook(req.body.id, req.body)
-        
+        const bookId: number = Number(req.params.id);
+        const response = this.bookService.editBook(bookId, req.body);
+        if (response === undefined) {
+            return res.status(404).json({ error: "Book not found."});
+        }
         return res.status(200).json(response);
-    } 
-}
+    }; 
+    id: any;
+};
 
 

@@ -3,8 +3,7 @@ import { RequestSchemasType } from "../interfaces/books.intefaces";
 
 export class ValidateRequest {
     static execute(schemas: RequestSchemasType){
-        return async (req: Request, res: Response, next: NextFunction) => {
-            
+        return async (req: Request, res: Response, next: NextFunction) => { 
             if (schemas.body){
                 req.body = await schemas.body.parseAsync(req.body)
             };    
@@ -16,5 +15,5 @@ export class ValidateRequest {
             return next();
         }; 
     };
-}
+};
 
